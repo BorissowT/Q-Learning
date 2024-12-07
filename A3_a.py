@@ -26,8 +26,8 @@ def eval_q(Q, env, num_episodes=200, max_steps=1000):
 
     success_rate = successes / num_episodes
     print(
-        f"Erfolgsquote: {success_rate * 100:.2f}%"
-        f" ({successes}/{num_episodes} erfolgreiche Episoden)")
+        f"Successquote: {success_rate * 100:.2f}%"
+        f" ({successes}/{num_episodes} sucessfull Episodes)")
     return success_rate
 
 
@@ -43,5 +43,5 @@ if __name__ == "__main__":
 
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
 
-    print("\nEvaluierung der trainierten Policy...")
+    print("\nEval policy...")
     eval_q(Q, env)

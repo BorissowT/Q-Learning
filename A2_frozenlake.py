@@ -3,8 +3,8 @@ import gym
 from gym.envs.toy_text.frozen_lake import generate_random_map
 
 
-def update_q(Q, state, action, reward, next_state, alpha, gamma):
 
+def update_q(Q, state, action, reward, next_state, alpha, gamma):
     max_next_q = np.max(Q[next_state])
 
     if reward == -1:
@@ -17,20 +17,16 @@ def update_q(Q, state, action, reward, next_state, alpha, gamma):
 
 
 def epsilon_greedy_action(Q, state, epsilon, num_actions):
-
     if np.random.uniform(0, 1) < epsilon:
-        return np.random.choice(
-            num_actions)
+        return np.random.choice(num_actions)
     return np.argmax(Q[state])
 
 
 def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
-
     num_states = env.observation_space.n
     num_actions = env.action_space.n
 
-    Q = np.ones(
-        (num_states, num_actions))
+    Q = np.ones((num_states, num_actions))
 
     for episode in range(num_episodes):
         state_before, _ = env.reset()
@@ -38,7 +34,8 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
         step = 0
 
         while not done and step < max_steps:
-            action = epsilon_greedy_action(Q, state_before, epsilon, num_actions)
+            action = epsilon_greedy_action(Q, state_before, epsilon,
+                                           num_actions)
             next_state, reward, done, truncated, _ = env.step(action)
 
             update_q(Q, state_before, action, reward, next_state, alpha, gamma)
@@ -52,7 +49,7 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
     return Q
 
 
-def test_q(Q):
+def test_q(Q, env):
     """
     Test the trained agent
 
@@ -125,4 +122,4 @@ if __name__ == "__main__":
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
 
     print("\nTraining is done. Now testing the agent:")
-    test_q(Q)
+    test_q(Q, env)
