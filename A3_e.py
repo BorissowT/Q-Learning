@@ -3,7 +3,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import gym
 
-from A2 import train_q_learning
+from A2_taxi import train_q_learning
 from A3_a import eval_q
 
 
@@ -34,16 +34,16 @@ if __name__ == "__main__":
     max_steps = 1000
     gammas = [0, 0.1, 0.5, 0.9, 1]
 
-    print("Оптимизация для Taxi...")
+    print("Optimize for Taxi...")
     taxi_results = hyperparameter_search_taxi(gammas, alpha, epsilon,
                                               num_episodes, max_steps)
 
     plt.figure(figsize=(8, 6))
     plt.plot(list(taxi_results.keys()), list(taxi_results.values()), marker='o',
              label="Taxi", color='orange')
-    plt.title("Taxi: Erfolgsrate gegen γ")
+    plt.title("Taxi: Success for γ")
     plt.xlabel("γ")
-    plt.ylabel("Erfolgsrate")
+    plt.ylabel("Successrate")
     plt.grid()
     plt.legend()
     plt.savefig("taxi_hyperparameter_search.png")

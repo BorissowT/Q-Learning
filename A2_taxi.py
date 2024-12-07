@@ -38,7 +38,7 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
             step += 1
 
         if (episode + 1) % 100 == 0:
-            print(f"Episode {episode + 1}/{num_episodes} abgeschlossen.")
+            print(f"Episode {episode + 1}/{num_episodes} done.")
 
     return Q
 
@@ -59,12 +59,10 @@ if __name__ == "__main__":
     done = False
     total_reward = 0
 
-    print("\nTraining abgeschlossen. Teste die Policy...")
+    print("\nTraining is done. Test")
     while not done:
         action = np.argmax(
             Q[state])
         state, reward, done, truncated, _ = env.step(action)
         total_reward += reward
         print(env.render())
-
-    print(f"Gesamtbelohnung: {total_reward}")

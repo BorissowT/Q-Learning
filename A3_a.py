@@ -1,7 +1,7 @@
 import gym
 import numpy as np
 
-from A2 import train_q_learning
+from A2_taxi import train_q_learning
 
 
 def eval_q(Q, env, num_episodes=200, max_steps=1000):
