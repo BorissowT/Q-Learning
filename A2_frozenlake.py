@@ -4,11 +4,8 @@ from gym.envs.toy_text.frozen_lake import generate_random_map
 
 
 def update_q(Q, state, action, reward, next_state, alpha, gamma):
-    """
-    Aktualisiert das Q-Array basierend auf der Q-Learning-Regel.
-    Wenn der Agent in ein Loch tritt, wird der Q-Wert stärker bestraft.
-    """
-    max_next_q = np.max(Q[next_state])  # Maximaler Q-Wert im Folgezustand
+
+    max_next_q = np.max(Q[next_state])
 
     if reward == -1:
         max_next_q = -10
@@ -20,28 +17,23 @@ def update_q(Q, state, action, reward, next_state, alpha, gamma):
 
 
 def epsilon_greedy_action(Q, state, epsilon, num_actions):
-    """
-    Wählt eine Aktion epsilon-greedy aus dem aktuellen Q-Array.
-    """
+
     if np.random.uniform(0, 1) < epsilon:
         return np.random.choice(
-            num_actions)  # Zufällige Aktion mit Wahrscheinlichkeit epsilon
-    return np.argmax(Q[state])  # Beste Aktion basierend auf Q-Werten
+            num_actions)
+    return np.argmax(Q[state])
 
 
 def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
-    """
-    Führt das Q-Learning für eine gegebene Umgebung aus.
-    """
-    num_states = env.observation_space.n  # Anzahl der Zustände
-    num_actions = env.action_space.n  # Anzahl der Aktionen
 
-    # Initialisiere das Q-Array mit Einsen
+    num_states = env.observation_space.n
+    num_actions = env.action_space.n
+
     Q = np.ones(
-        (num_states, num_actions))  # Statt mit Nullen beginnen wir mit Einsen
+        (num_states, num_actions))
 
     for episode in range(num_episodes):
-        state_before, _ = env.reset()  # Setze die Umgebung zurück
+        state_before, _ = env.reset()
         done = False
         step = 0
 
@@ -49,13 +41,11 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
             action = epsilon_greedy_action(Q, state_before, epsilon, num_actions)
             next_state, reward, done, truncated, _ = env.step(action)
 
-            # Q-Update
             update_q(Q, state_before, action, reward, next_state, alpha, gamma)
 
             state_before = next_state
             step += 1
 
-        # Optional: Fortschrittsanzeige alle 100 Episoden
         if (episode + 1) % 100 == 0:
             print(f"Episode {episode + 1}/{num_episodes} abgeschlossen.")
 
@@ -87,12 +77,12 @@ def test_q(Q):
     max_steps = 100
     while not done and step < max_steps:
         action = np.argmax(
-            Q[state])  # Wähle die beste Aktion basierend auf den Q-Werten
+            Q[state])
         state, reward, done, truncated, _ = env.step(
-            action)  # Führe die Aktion aus und beobachte das Ergebnis
+            action)
         total_reward += reward
         step += 1
-        print(env.render())  # Gebe die Umgebung nach jeder Aktion aus
+        print(env.render())
 
     print(f"\nTotal reward during testing: {total_reward}")
 
@@ -132,7 +122,6 @@ if __name__ == "__main__":
     epsilon = 0.1
     max_steps = 1000
 
-    # Train the agent using Q-learning
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
 
     print("\nTraining is done. Now testing the agent:")
