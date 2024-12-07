@@ -46,6 +46,7 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
 if __name__ == "__main__":
     env = gym.make("Taxi-v3", render_mode="ansi")
 
+    # hyperparameters
     num_episodes = 5000
     alpha = 0.1
     gamma = 0.99
