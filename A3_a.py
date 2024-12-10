@@ -35,9 +35,9 @@ if __name__ == "__main__":
     env = gym.make("Taxi-v3")
 
     # hyperparameters
-    num_episodes = 2000
-    alpha = 0.1
-    gamma = 0.99
+    num_episodes = 1000
+    alpha = 0.9
+    gamma = 0.1
     epsilon = 0.1
     max_steps = 1000
 

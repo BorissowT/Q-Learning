@@ -2,8 +2,6 @@ import numpy as np
 import gym
 from gym.envs.toy_text.frozen_lake import generate_random_map
 
-
-
 def update_q(Q, state, action, reward, next_state, alpha, gamma):
     max_next_q = np.max(Q[next_state])
 
@@ -68,7 +66,6 @@ def test_q(Q, env):
     print(env.render())
 
     done = False
-    total_reward = 0
     step = 0
 
     max_steps = 100
@@ -77,11 +74,8 @@ def test_q(Q, env):
             Q[state])
         state, reward, done, truncated, _ = env.step(
             action)
-        total_reward += reward
         step += 1
         print(env.render())
-
-    print(f"\nTotal reward during testing: {total_reward}")
 
 
 def test_into_wall(Q):

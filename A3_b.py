@@ -5,66 +5,53 @@ from A2_frozenlake import train_q_learning
 matplotlib.use('TkAgg')
 import numpy as np
 import gym
-import matplotlib.pyplot as plt
 from gym.envs.toy_text.frozen_lake import generate_random_map
+import matplotlib.pyplot as plt
 
 
-def test_q(Q, env):
-    """
-    Test the trained agent
+def calculate_success_rate(Q, env, num_tests=100):
 
-    0: Move left
-    1: Move down
-    2: Move right
-    3: Move up
+    successes = 0
+    for _ in range(num_tests):
+        state, _ = env.reset()
+        done = False
+        step = 0
+        max_steps = 100
 
-    MAP of states:
-    0  1  2  3
-    4  5  6  7
-    8  9  10 11
-    12 13 14 15
-    """
-    state, _ = env.reset()
-    done = False
-    total_reward = 0
-    step = 0
-    max_steps = 100
-    while not done and step < max_steps:
-        action = np.argmax(Q[state])
-        state, reward, done, truncated, _ = env.step(action)
-        total_reward += reward
-        step += 1
-    return total_reward
+        while not done and step < max_steps:
+            action = np.argmax(Q[state])
+            state, reward, done, truncated, _ = env.step(action)
+            #print(env.render())
+            if done and reward > 0:
+                successes += 1
+            step += 1
 
-
-def hyperparameter_search(env, num_episodes, alpha, epsilon, max_steps,
-                          gamma_values):
-    success_rates = []
-
-    for gamma in gamma_values:
-        print(f"Testing gamma = {gamma}...")
-        Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon,
-                             max_steps)
-        total_reward = test_q(Q, env)
-        success_rate = total_reward / max_steps
-        success_rates.append(success_rate)
-
-    return success_rates
+    return successes / num_tests
 
 
 if __name__ == "__main__":
-    env = gym.make("FrozenLake-v1", is_slippery=False, render_mode="ansi",
-                   desc=generate_random_map(size=4))
+    env = gym.make(
+        "FrozenLake-v1",
+        is_slippery=False,
+        render_mode="ansi",
+        desc=generate_random_map(size=4)
+    )
 
     num_episodes = 5000
     alpha = 0.1
     epsilon = 0.1
     max_steps = 1000
-    gamma_values = [0, 0.1, 0.5, 0.9, 1]
+    gamma_values = [0.99]
+    success_rates = []
 
-    success_rates = hyperparameter_search(env, num_episodes, alpha, epsilon,
-                                          max_steps, gamma_values)
+    for gamma in gamma_values:
+        print(f"Training with γ = {gamma}...")
+        Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
+        success_rate = calculate_success_rate(Q, env)
+        success_rates.append(success_rate)
+        print(f"Success rate for γ = {gamma}: {success_rate:.2f}")
 
+    # Plotting γ vs. success rate
     plt.plot(gamma_values, success_rates, marker='o')
     plt.xlabel('Gamma (γ)')
     plt.ylabel('Successrate')
@@ -72,5 +59,5 @@ if __name__ == "__main__":
     plt.grid(True)
 
     plt.savefig('gamma_vs_success_rate.png', format='png')
-    plt.close()  # Schließt das Plot-Fenster, um Speicher zu sparen
+    plt.close()
     print("Plot saved as 'gamma_vs_success_rate.png'.")
