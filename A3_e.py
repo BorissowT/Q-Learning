@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import gym
 
 from A2_taxi import train_q_learning
-from A3_a import eval_q
+from A3_a_taxi import eval_q
 
 
 def hyperparameter_search_taxi(gammas,

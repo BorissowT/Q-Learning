@@ -2,6 +2,7 @@ import numpy as np
 import gym
 from gym.envs.toy_text.frozen_lake import generate_random_map
 
+
 def update_q(Q, state, action, reward, next_state, alpha, gamma):
     max_next_q = np.max(Q[next_state])
 
@@ -12,7 +13,6 @@ def update_q(Q, state, action, reward, next_state, alpha, gamma):
         reward = -1
 
     Q[state, action] += alpha * (reward + gamma * max_next_q - Q[state, action])
-
 
 def epsilon_greedy_action(Q, state, epsilon, num_actions):
     if np.random.uniform(0, 1) < epsilon:
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     num_episodes = 5000
     alpha = 0.1
     gamma = 0.99
-    epsilon = 0.1
+    epsilon = 0.2
     max_steps = 1000
 
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
