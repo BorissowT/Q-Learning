@@ -1,5 +1,4 @@
 import matplotlib
-
 from A2_frozenlake import train_q_learning
 
 matplotlib.use('TkAgg')
@@ -39,24 +38,33 @@ def hyperparameter_search(env, num_episodes, alpha, epsilon, max_steps,
 
 
 if __name__ == "__main__":
-    env = gym.make("FrozenLake-v1", is_slippery=True, render_mode="ansi",
-                   desc=generate_random_map(size=4))
+    env = gym.make("FrozenLake-v1", is_slippery=True, render_mode="ansi")
 
-    num_episodes = 5000
-    alpha = 0.1
-    epsilon = 0.1
+    num_episodes = 15000
+    alpha = 0.25
+    epsilon = 0.5
     max_steps = 1000
     gamma_values = [0, 0.1, 0.5, 0.9, 1]
 
-    success_rates = hyperparameter_search(env, num_episodes, alpha, epsilon,
-                                          max_steps, gamma_values)
+    all_success_rates = []
 
-    plt.plot(gamma_values, success_rates, marker='o')
+    for i in range(10):
+        print(f"\nRunning hyperparameter search experiment {i+1}...")
+        success_rates = hyperparameter_search(env, num_episodes, alpha, epsilon,
+                                              max_steps, gamma_values)
+        all_success_rates.append(success_rates)
+        print(f"Success rates for experiment {i+1}: {success_rates}")
+
+    all_success_rates = np.array(all_success_rates)
+
+    mean_success_rates = all_success_rates.mean(axis=0)
+
+    plt.plot(gamma_values, mean_success_rates, marker='o')
     plt.xlabel('Gamma (γ)')
-    plt.ylabel('Successrate')
-    plt.title('Hyperparametersearch: Success vs Gamma')
+    plt.ylabel('Average Success Rate')
+    plt.title('Hyperparameter Search: Success vs Gamma '
+              '(Average over 10 experiments)')
     plt.grid(True)
 
-    plt.savefig('gamma_vs_success_rate_slippery.png', format='png')
+    plt.savefig(f'gamma_vs_average_success_rate_slippery_e={epsilon}_q_zeros_v1.png', format='png')
     plt.close()
-    print("Plot saved as 'gamma_vs_success_rate_slippery.png'.")

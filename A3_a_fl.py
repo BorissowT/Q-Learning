@@ -1,5 +1,6 @@
 import gym
 import numpy as np
+from gym.envs.toy_text.frozen_lake import generate_random_map
 
 from A2_frozenlake import train_q_learning
 
@@ -31,12 +32,13 @@ def eval_q(Q, env, num_episodes=200, max_steps=1000):
 
 
 if __name__ == "__main__":
-    env = gym.make("FrozenLake-v1", is_slippery=False)
+    env = gym.make("FrozenLake-v1", is_slippery=True,
+                   desc=generate_random_map(size=4))
 
-    num_episodes = 5000
-    alpha = 0.1
-    gamma = 0.2
-    epsilon = 0.6
+    num_episodes = 15000
+    alpha = 0.25
+    gamma = 0.95
+    epsilon = 0.5
     max_steps = 1000
 
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
