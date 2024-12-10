@@ -35,9 +35,9 @@ if __name__ == "__main__":
 
     num_episodes = 5000
     alpha = 0.1
-    gamma = 0.99
-    epsilon = 0.1
-    max_steps = 100
+    gamma = 0.2
+    epsilon = 0.6
+    max_steps = 1000
 
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
 

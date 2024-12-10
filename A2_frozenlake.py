@@ -11,6 +11,7 @@ def update_q(Q, state, action, reward, next_state, alpha, gamma):
 
     if state == next_state:
         reward = -1
+        max_next_q = -10
 
     Q[state, action] += alpha * (reward + gamma * max_next_q - Q[state, action])
 
@@ -24,7 +25,7 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
     num_states = env.observation_space.n
     num_actions = env.action_space.n
 
-    Q = np.ones((num_states, num_actions))
+    Q = np.zeros((num_states, num_actions))
 
     for episode in range(num_episodes):
         state_before, _ = env.reset()
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     num_episodes = 5000
     alpha = 0.1
     gamma = 0.99
-    epsilon = 0.2
+    epsilon = 0.4
     max_steps = 1000
 
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
