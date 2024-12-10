@@ -15,6 +15,12 @@ def update_q(Q, state, action, reward, next_state, alpha, gamma):
 
     Q[state, action] += alpha * (reward + gamma * max_next_q - Q[state, action])
 
+
+def update_q_alternative(Q, state, action, reward, next_state, alpha, gamma):
+    Q[state, action] += alpha * (
+            reward + gamma * np.max(Q[next_state]) - Q[state, action])
+
+
 def epsilon_greedy_action(Q, state, epsilon, num_actions):
     if np.random.uniform(0, 1) < epsilon:
         return np.random.choice(num_actions)
@@ -37,7 +43,8 @@ def train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps):
                                            num_actions)
             next_state, reward, done, truncated, _ = env.step(action)
 
-            update_q(Q, state_before, action, reward, next_state, alpha, gamma)
+            update_q(Q, state_before, action, reward, next_state,
+                                 alpha, gamma)
 
             state_before = next_state
             step += 1

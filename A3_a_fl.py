@@ -32,14 +32,14 @@ def eval_q(Q, env, num_episodes=200, max_steps=1000):
 
 
 if __name__ == "__main__":
-    env = gym.make("FrozenLake-v1", is_slippery=True,
+    env = gym.make("FrozenLake-v1", is_slippery=True, render_mode="ansi",
                    desc=generate_random_map(size=4))
 
-    num_episodes = 15000
-    alpha = 0.25
-    gamma = 0.95
-    epsilon = 0.5
+    num_episodes = 3000
+    alpha = 0.1
+    epsilon = 0.1
     max_steps = 1000
+    gamma = 0.5
 
     Q = train_q_learning(env, num_episodes, alpha, gamma, epsilon, max_steps)
 
